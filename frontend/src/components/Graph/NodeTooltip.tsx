@@ -47,7 +47,7 @@ export function NodeTooltip({ node, onClose }: NodeTooltipProps) {
             </button>
 
             <div className="tooltip-node-id">{node.id}</div>
-            <div style={{ fontSize: '9px', color: 'var(--text-muted)', fontFamily: 'var(--font-header)', letterSpacing: '0.1em' }}>
+            <div style={{ fontSize: '11px', color: 'var(--text-muted)', fontFamily: 'var(--font-header)', letterSpacing: '0.1em' }}>
                 CLUSTER {node.cluster_id} • {riskLabel}
             </div>
 
@@ -103,7 +103,7 @@ export function NodeTooltip({ node, onClose }: NodeTooltipProps) {
             <div style={{ marginTop: '16px' }}>
                 <div style={{
                     fontFamily: 'var(--font-header)',
-                    fontSize: '9px',
+                    fontSize: '11px',
                     color: 'var(--text-muted)',
                     letterSpacing: '0.12em',
                     textTransform: 'uppercase' as const,
