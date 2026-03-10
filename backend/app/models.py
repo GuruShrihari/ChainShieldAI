@@ -19,6 +19,7 @@ class Node(BaseModel):
     channels_used: list[str]
     cluster_id: int
     risk_breakdown: RiskBreakdown
+    ml_score: float | None = None
 
 
 class Edge(BaseModel):

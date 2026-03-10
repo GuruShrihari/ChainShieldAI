@@ -19,6 +19,7 @@ export interface GraphNode {
     channels_used: string[];
     cluster_id: number;
     risk_breakdown: RiskBreakdown;
+    ml_score: number | null;
 }
 
 export interface GraphEdge {
@@ -103,6 +104,7 @@ export interface ForceGraphNode {
     channels_used: string[];
     cluster_id: number;
     risk_breakdown: RiskBreakdown;
+    ml_score: number | null;
     x?: number;
     y?: number;
     vx?: number;

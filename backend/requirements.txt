@@ -5,3 +5,7 @@ numpy
 websockets
 pydantic
 python-multipart
+scikit-learn
+xgboost
+pandas
+joblib

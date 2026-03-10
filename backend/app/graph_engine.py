@@ -257,6 +257,8 @@ class GraphEngine:
 
     def get_nodes(self) -> list[Node]:
         """Return all nodes as Pydantic models."""
+        from app.ml_model import get_mule_probability, is_model_loaded
+
         nodes: list[Node] = []
         for node_id, data in self.graph.nodes(data=True):
             channels = data.get("channels_used", set())
@@ -270,6 +272,10 @@ class GraphEngine:
                 RiskBreakdown(velocity=0, network_exposure=0, anomaly=0, channel_risk=0),
             )
 
+            ml_score = None
+            if is_model_loaded():
+                ml_score = get_mule_probability(data)
+
             nodes.append(
                 Node(
                     id=node_id,
@@ -280,6 +286,7 @@ class GraphEngine:
                     channels_used=channels_list,
                     cluster_id=self._cluster_assignments.get(node_id, 0),
                     risk_breakdown=breakdown,
+                    ml_score=ml_score,
                 )
             )
         return nodes

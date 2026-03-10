@@ -1,0 +1,33 @@
+{
+  "version": "1.0.0",
+  "roc_auc": 0.9787,
+  "accuracy": 0.9935,
+  "precision_mule": 1.0,
+  "recall_mule": 0.9614,
+  "f1_mule": 0.9803,
+  "feature_names": [
+    "INIT_BALANCE",
+    "tx_count_sent",
+    "total_sent",
+    "avg_sent",
+    "max_sent",
+    "unique_receivers",
+    "tx_count_received",
+    "total_received",
+    "avg_received",
+    "max_received",
+    "unique_senders",
+    "fraud_tx_sent",
+    "fraud_tx_received",
+    "total_tx",
+    "total_volume",
+    "fan_in_ratio",
+    "fan_out_ratio",
+    "send_receive_ratio",
+    "avg_tx_amount",
+    "is_individual",
+    "country_freq"
+  ],
+  "n_train": 8000,
+  "n_test": 2000
+}

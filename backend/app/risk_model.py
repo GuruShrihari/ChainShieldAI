@@ -12,7 +12,7 @@ from typing import Any
 
 import networkx as nx
 
-from app.ml_placeholder import get_cashout_probability
+from app.ml_model import get_cashout_probability, is_model_loaded
 from app.models import SuspiciousChain
 
 
@@ -64,7 +64,7 @@ class RiskModel:
                             cumulative_risk=round(cum_risk, 2),
                             cashout_probability=cashout_prob,
                             channels=chain_info["channels"],
-                            is_mock_score=True,
+                            is_mock_score=not is_model_loaded(),
                         )
                     )
 
@@ -172,7 +172,7 @@ class RiskModel:
                                 cumulative_risk=round(cum_risk, 2),
                                 cashout_probability=cashout_prob,
                                 channels=chain_info["channels"],
-                                is_mock_score=True,
+                                is_mock_score=not is_model_loaded(),
                             )
                         )
 

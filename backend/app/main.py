@@ -12,9 +12,9 @@ from typing import Any
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.data_generator import generate_transactions
+from app.data_generator import generate_transactions, load_real_transactions
 from app.graph_engine import GraphEngine
-from app.ml_placeholder import get_model_status
+from app.ml_model import get_model_status
 from app.models import GraphSnapshot, Stats
 from app.risk_model import RiskModel
 from app.websocket_manager import WebSocketManager
@@ -44,7 +44,15 @@ app.add_middleware(
 
 graph_engine = GraphEngine()
 ws_manager = WebSocketManager()
-transactions: list[dict[str, Any]] = generate_transactions()
+
+# Try real data first, fall back to synthetic
+try:
+    transactions: list[dict[str, Any]] = load_real_transactions(batch_size=500)
+    DATA_MODE = "real"
+except Exception:
+    transactions = generate_transactions()
+    DATA_MODE = "demo"
+
 transaction_index: int = 0
 processed_transactions: list[dict[str, Any]] = []
 alerts_fired: int = 0

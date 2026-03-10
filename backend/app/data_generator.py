@@ -133,3 +133,61 @@ def generate_transactions() -> list[dict[str, Any]]:
             tx["tx_id"] = f"TX_{idx:04d}"
 
     return all_txs
+
+
+def load_real_transactions(batch_size: int = 500) -> list[dict[str, Any]]:
+    """Load transactions from the real CSV dataset.
+
+    Reads data/transactions.csv, maps columns to the format expected by
+    the graph engine, and returns up to `batch_size` transactions sorted
+    by timestamp.
+
+    Falls back to generate_transactions() if the CSV is not found.
+    """
+    from pathlib import Path
+
+    import pandas as pd
+
+    project_root = Path(__file__).resolve().parent.parent.parent
+    tx_csv = project_root / "data" / "transactions.csv"
+
+    if not tx_csv.exists():
+        print(f"[WARNING] {tx_csv} not found — falling back to synthetic data")
+        return generate_transactions()
+
+    # Channel mapping from TX_TYPE to our channel names
+    channel_map: dict[str, str] = {
+        "TRANSFER": "bank",
+        "CASH-IN": "atm",
+        "CASH-OUT": "atm",
+        "DEBIT": "mobile",
+        "PAYMENT": "wallet",
+    }
+
+    df = pd.read_csv(tx_csv, nrows=batch_size)
+
+    transactions: list[dict[str, Any]] = []
+    base_time = datetime(2026, 2, 28, 9, 0, 0)
+
+    for _, row in df.iterrows():
+        tx_type = str(row.get("TX_TYPE", "TRANSFER"))
+        channel = channel_map.get(tx_type, "bank")
+
+        # Map TIMESTAMP (integer step) to ISO datetime
+        step = int(row.get("TIMESTAMP", 0))
+        tx_time = base_time + timedelta(minutes=step * 5)
+
+        tx: dict[str, Any] = {
+            "tx_id": f"TX_{int(row['TX_ID']):06d}",
+            "from_account": f"ACC_{int(row['SENDER_ACCOUNT_ID']):05d}",
+            "to_account": f"ACC_{int(row['RECEIVER_ACCOUNT_ID']):05d}",
+            "amount": round(float(row["TX_AMOUNT"]), 2),
+            "channel": channel,
+            "timestamp": tx_time.isoformat(),
+            "location": "Unknown",
+        }
+        transactions.append(tx)
+
+    transactions.sort(key=lambda t: t["timestamp"])
+    return transactions
+

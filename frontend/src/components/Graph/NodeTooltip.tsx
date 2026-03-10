@@ -86,15 +86,16 @@ export function NodeTooltip({ node, onClose }: NodeTooltipProps) {
                 ))}
             </div>
 
-            {/* Model Risk Contribution — MOCK */}
+            {/* Model Risk Contribution */}
             <div style={{ marginTop: '16px' }}>
                 <div className="tooltip-stat-row">
                     <span className="tooltip-stat-label">
-                        ML Risk Contrib. <span className="mock-badge">⚠ MOCK</span>
+                        ML Mule Prob. {node.ml_score === null && <span className="mock-badge">⚠ MOCK</span>}
                     </span>
-                    {/* MOCK — ml_placeholder.get_model_risk_contribution() */}
                     <span className="tooltip-stat-value">
-                        {((node.id.split('').reduce((a, c) => a + c.charCodeAt(0), 0) % 100) / 100 * 3).toFixed(2)}
+                        {node.ml_score !== null
+                            ? `${(node.ml_score * 100).toFixed(1)}%`
+                            : ((node.id.split('').reduce((a, c) => a + c.charCodeAt(0), 0) % 100) / 100 * 3).toFixed(2)}
                     </span>
                 </div>
             </div>
